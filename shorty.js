@@ -5,6 +5,7 @@ const locallydb = require('locallydb');
 const shortid = require('shortid');
 const db = new locallydb('shortydb');
 const links = db.collection('links');
+require('dotenv').load();
 const app = express();
 
 app.use(bodyparser.urlencoded({extended: true}));
@@ -41,6 +42,6 @@ app.get('/go/*', (req, res) => {
 			});
 		}
 	});
-app.listen(8080, () => {
-		console.log('Server running on port 8080.')
+app.listen(process.env.PORT, () => {
+		console.log(`Server running on port ${process.env.PORT}.`)
 	});

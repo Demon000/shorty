@@ -1,1 +1,1 @@
-worker: node shorty.js
+web: node shorty.js

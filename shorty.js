@@ -8,6 +8,11 @@ const links = db.collection('links');
 require('dotenv').load();
 const app = express();
 
+function clean(s)
+{
+	return '//' + s.replace(/http:\/\/|https:\/\/|\/\//g, '');
+}
+
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 app.use((req, res, next) => {
@@ -17,7 +22,8 @@ app.use((req, res, next) => {
 	});
 app.use(express.static('static'));
 app.get('/create/*', (req, res) => {
-		let existent = links.where({link: req.params[0]}).items[0];
+		let cleans = clean(req.params[0]);
+		let existent = links.where({link: cleans}).items[0];
 		if(existent) {
 			res.json({
 				link: existent.link,
@@ -25,7 +31,7 @@ app.get('/create/*', (req, res) => {
 			});
 		} else {
 			let data = {
-				link: req.params[0],
+				link: cleans,
 				short: shortid.generate(),
 			};
 			res.json(data);
